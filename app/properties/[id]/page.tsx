@@ -5,6 +5,22 @@ import Link from 'next/link'
 import { MapPin, Bed, Bath, Square, ExternalLink } from 'lucide-react'
 import { notFound } from 'next/navigation'
 
+interface Property {
+  id: string
+  name: string
+  location: string
+  area?: string
+  status: 'available' | 'sold' | 'pending'
+  bedrooms?: number
+  bathrooms?: number
+  sqft?: number
+  description?: string
+  virtual_tour_url?: string
+  images: string[]
+  price: number
+  type: string
+}
+
 interface PropertyDetailPageProps {
   params: {
     id: string
@@ -18,7 +34,7 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
     .from('properties')
     .select('*')
     .eq('id', params.id)
-    .single()
+    .single<Property>()
 
   if (!property) {
     notFound()
@@ -32,7 +48,8 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
     }).format(price)
   }
 
-  const images = property.images && property.images.length > 0 
+  // Type the images array to avoid "implicit any" errors
+  const images: string[] = property.images && property.images.length > 0 
     ? property.images 
     : ['/placeholder-property.svg']
 
@@ -55,12 +72,12 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
             {images.length > 1 && (
               <div className="grid grid-cols-2 gap-4">
                 {images.slice(1, 5).map((image: string, index: number) => (
-  <div key={index} className="relative h-44 w-full bg-gray-200 rounded-lg overflow-hidden">
-    <Image
-      src={image}
-      alt={`${property.name} ${index + 2}`}
-      fill
-      className="object-cover"
+                  <div key={index} className="relative h-44 w-full bg-gray-200 rounded-lg overflow-hidden">
+                    <Image
+                      src={image}
+                      alt={`${property.name} ${index + 2}`}
+                      fill
+                      className="object-cover"
                     />
                   </div>
                 ))}
@@ -207,4 +224,3 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
     </div>
   )
 }
-
