@@ -54,13 +54,13 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
             </div>
             {images.length > 1 && (
               <div className="grid grid-cols-2 gap-4">
-                {images.slice(1, 5).map((image, index) => (
-                  <div key={index} className="relative h-44 w-full bg-gray-200 rounded-lg overflow-hidden">
-                    <Image
-                      src={image}
-                      alt={`${property.name} ${index + 2}`}
-                      fill
-                      className="object-cover"
+                {images.slice(1, 5).map((image: string, index: number) => (
+  <div key={index} className="relative h-44 w-full bg-gray-200 rounded-lg overflow-hidden">
+    <Image
+      src={image}
+      alt={`${property.name} ${index + 2}`}
+      fill
+      className="object-cover"
                     />
                   </div>
                 ))}
